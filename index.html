@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Omni Agent Live</title>
+</head>
+<body>
+  <h2>🤖 Omni Live Agent</h2>
+  <input id="input" placeholder="Type here..." />
+  <button onclick="send()">Send</button>
+
+  <pre id="chat"></pre>
+
+  <script>
+    async function send() {
+      const input = document.getElementById("input").value;
+
+      const res = await fetch("http://localhost:3000/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: input })
+      });
+
+      const data = await res.json();
+
+      document.getElementById("chat").innerText +=
+        "You: " + input + "\nAgent: " + data.reply + "\n\n";
+    }
+  </script>
+</body>
+</html>
