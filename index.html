@@ -1,35 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Omni Agent Live</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMNI-ULTRA V2026</title>
+    <style>
+        body { background: #0f0f0f; color: #00ff00; font-family: monospace; padding: 10px; }
+        #chat-box { height: 60vh; overflow-y: auto; border: 1px solid #333; padding: 10px; margin-bottom: 10px; }
+        .feature-bar { display: flex; gap: 10px; margin-bottom: 10px; }
+        button { background: #222; color: #00ff00; border: 1px solid #00ff00; padding: 8px; cursor: pointer; }
+        input[type="text"] { width: 70%; background: #111; color: #fff; border: 1px solid #444; padding: 10px; }
+    </style>
 </head>
 <body>
-  <h2>🤖 Omni Live Agent</h2>
-  <input id="input" placeholder="Type here..." />
-  <button onclick="send()">Send</button>
+    <h2>🌌 OMNI-ULTRA V2026</h2>
+    
+    <div class="feature-bar">
+        <button onclick="document.getElementById('file-input').click()">📸 VISION</button>
+        <button id="voice-btn">🎤 VOICE</button>
+        <button onclick="location.reload()">🔄 SYNC</button>
+    </div>
 
-  <pre id="chat"></pre>
+    <input type="file" id="file-input" style="display:none;" accept="image/*">
+    <div id="chat-box"></div>
+    
+    <div style="display:flex;">
+        <input type="text" id="user-input" placeholder="Ask Omni anything...">
+        <button onclick="sendMessage()" style="width:25%;">SEND</button>
+    </div>
 
-  <script>
-    async function send() {
-      const input = document.getElementById("input").value;
+    <script>
+        const API_URL = "https://portable-travels-looked-happens.trycloudflare.com";
 
-      const res = await fetch("http://localhost:3000/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ message: input })
-      });
-
-      const data = await res.json();
-
-      document.getElementById("chat").innerText +=
-        "You: " + input + "\nAgent: " + data.reply + "\n\n";
-    }
-  </script>
+        async function sendMessage() {
+            const input = document.getElementById('user-input').value;
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML += "<b>You:</b> " + input + "<br>";
+            
+            try {
+                const response = await fetch(API_URL + "/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: input })
+                });
+                const data = await response.json();
+                chatBox.innerHTML += "<b>Agent:</b> " + data.reply + "<br><br>";
+            } catch (err) {
+                chatBox.innerHTML += "<span style='color:red;'>Connection Error. Check Tunnel.</span><br>";
+            }
+            document.getElementById('user-input').value = "";
+        }
+    </script>
 </body>
 </html>
-
-
-
